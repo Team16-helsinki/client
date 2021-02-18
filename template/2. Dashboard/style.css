@@ -3,6 +3,10 @@ section{
   margin-top: auto;
   padding-top: 5vh;
 }
+#header{
+  justify-content: space-between;
+  align-items: center;
+}
 #cardList{
   display: flex;
   justify-content: space-between;
