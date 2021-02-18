@@ -3,6 +3,7 @@ import VueRouter from 'vue-router'
 import Home from '../views/Home.vue'
 import UserStart from '../views/UserStart.vue'
 import ListRoom from '../views/ListRoom.vue'
+import PlayRoom from '../views/PlayRoom.vue'
 
 Vue.use(VueRouter)
 
@@ -29,6 +30,11 @@ const routes = [
     path: '/room',
     name: 'ListRoom',
     component: ListRoom
+  },
+  {
+    path: '/playroom',
+    name: 'PLayRoom',
+    component: PlayRoom
   }
 ]
 
