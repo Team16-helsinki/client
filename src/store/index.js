@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 import axios from 'axios'
+import router from '../router'
 
 Vue.use(Vuex)
 
@@ -28,6 +29,14 @@ export default new Vuex.Store({
     },
     setUserFromServer(state, users) {
       state.users = users
+    },
+    restartGame (state) {
+      state.messages = [],
+      state.songs = [],
+      state.users = [],
+      state.started = false
+      localStorage.clear()
+      router.push('/')
     }
   },
   actions: {
@@ -56,6 +65,9 @@ export default new Vuex.Store({
     },
     SOCKET_setUserFromServer(context, users){
       context.commit('setUserFromServer', users)
+    },
+    SOCKET_restartGame (context) {
+      context.commit('restartGame')
     }
   },
   modules: {

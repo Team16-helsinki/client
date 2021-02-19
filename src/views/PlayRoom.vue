@@ -5,7 +5,8 @@
         <div class="card">
           <div class="card-body" v-for="(user,i) in users" :key="i">
             <img src='https://avataaars.io/?avatarStyle=Circle&topType=LongHairBigHair&accessoriesType=Blank&hairColor=SilverGray&facialHairType=BeardLight&facialHairColor=BrownDark&clotheType=Hoodie&clotheColor=Gray01&eyeType=Happy&eyebrowType=Default&mouthType=Default&skinColor=Brown'/>
-            {{user}}
+            {{user.name}} <br>
+            <h4 style="margin-top: 0">Score: {{user.score}}</h4>
           </div>
         </div>
       </div>
@@ -17,7 +18,7 @@
         <div v-if="started">
           <h1>{{ nama }}</h1>
           <h1>{{ count }}</h1>
-          <h1>{{ score }} ===</h1>
+          <!-- <h1>{{ score }} ===</h1> -->
           <h1>{{ title }}</h1>
           <iframe :src="nama" frameborder="0"></iframe>
           <div v-for="(message,i) in messages" :key="i">
@@ -33,6 +34,7 @@
 </template>
 
 <script>
+import Swal from "sweetalert2"
 export default {
   name: 'PlayRoom',
   data () {
@@ -75,9 +77,37 @@ export default {
       console.log('masiuk start ==============')
     },
     winner (payload) {
-      if (payload.name === this.username) {
-        
-      }
+      // Swal.fire
+      // this.$router({ name: ''})
+      // if (payload.name === this.username ) {
+        Swal.fire({
+          title: payload.name === this.username ? `You Win ${payload.name}`: `You lose ${this.username}`,
+          showDenyButton: false,
+          showCancelButton: false,
+          confirmButtonText: `Restart`,
+          // denyButtonText: `Don't save`,
+        }).then((result) => {
+          /* Read more about isConfirmed, isDenied below */
+          if (result.isConfirmed) {
+            this.$socket.emit('restart')
+            // this.$router.push('/')
+          }
+        })
+      // } else {
+      //   Swal.fire({
+      //     title: 'Sorry you lose ' + localStorage.username,
+      //     showDenyButton: true,
+      //     showCancelButton: true,
+      //     confirmButtonText: `Restart`,
+      //     // denyButtonText: `Don't save`,
+      //   }).then((result) => {
+      //     /* Read more about isConfirmed, isDenied below */
+      //     if (result.isConfirmed) {
+      //       this.$socket.emit('restart')
+      //       // this.$router.push('/')
+      //     }
+      //   })
+      // }
     }
   },
   methods: {
@@ -91,9 +121,6 @@ export default {
     },
     startGame () {
       this.$socket.emit('startGame')
-      // this.started = true
-      // this.startTImer()
-      // this.$store.dispatch('fetchSongData')
     },
     timer () {
       setTimeout(() => {
