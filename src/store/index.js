@@ -23,7 +23,10 @@ export default new Vuex.Store({
     },
     setUser (state, users) {
       state.users = users
-    }
+    },
+    setUserFromServer(state, users) {
+      state.users = users
+    },
   },
   actions: {
     SOCKET_init (context, messages) {
@@ -47,6 +50,9 @@ export default new Vuex.Store({
         .catch(error => {
           console.log(error)
         })
+    },
+    SOCKET_setUserFromServer(context, users){
+      context.commit('setUserFromServer', users)
     }
   },
   modules: {
