@@ -1,5 +1,8 @@
 <template>
   <section id="user">
+    <div class="alert alert-danger" role="alert">
+      {{ error }}
+    </div>
     <div id="div">
       <img class="img" src="https://www.onlinelogomaker.com/blog/wp-content/uploads/2017/06/music-logo-design.jpg">
       <div id="items">
@@ -19,14 +22,19 @@ export default {
   name: 'UserStart',
   data () {
     return {
-      username: ''
+      username: '',
+      error: ''
     }
   },
   methods: {
     getUsername () {
-      localStorage.setItem('username', this.username)
-      this.$socket.emit('inputUser', this.username)
-      this.$router.push({ name: 'PLayRoom' })
+      if (!this.username) {
+        this.error = 'Username tidak boleh kosong'
+      } else {
+        localStorage.setItem('username', this.username)
+        this.$socket.emit('inputUser', this.username)
+        this.$router.push({ name: 'PLayRoom' })
+      }
     }
   }
 }
