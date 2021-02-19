@@ -1,0 +1,29 @@
+section{
+  height: 100vh;
+  margin-top: auto;
+  padding-top: 5vh;
+}
+#header{
+  justify-content: space-between;
+  align-items: center;
+}
+#cardList{
+  display: flex;
+  justify-content: space-between;
+}
+.card{
+  margin-bottom: 5vh;
+  width: 40vh;
+  align-items: center;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+.card img{
+  height: 50vh;
+  width: 40vh;
+}
+.card-body .button{
+  padding-left: 11vh;
+}
+h5{
+  text-align: center;
+}
