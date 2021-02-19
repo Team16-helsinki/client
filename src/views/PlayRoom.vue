@@ -3,26 +3,29 @@
     <div class="row">
       <div id="userList">
         <div class="card">
-          <div class="card-body">
+          <div class="card-body" v-for="(user,i) in users" :key="i">
             <img src='https://avataaars.io/?avatarStyle=Circle&topType=LongHairBigHair&accessoriesType=Blank&hairColor=SilverGray&facialHairType=BeardLight&facialHairColor=BrownDark&clotheType=Hoodie&clotheColor=Gray01&eyeType=Happy&eyebrowType=Default&mouthType=Default&skinColor=Brown'/>
-            {{username}}
+            {{user}}
           </div>
         </div>
       </div>
       <div id="gamePage">
         <div v-if="!started">
-          <button @click="startGame" class="btn btn-bg btn-primary">START</button>
-          <p>klik to START</p> <br>
+          <button @click="startGame" class="btn btn-bg btn-primary"  v-if="username === playerOne">START</button>
+          <p>game will start soon</p> <br>
         </div>
         <div v-if="started">
-          <div id="css">tes</div>
-          <h2>{{ score }}</h2>
-          <h2>{{ count }}</h2>
-          <!-- <audio controls>
-            <source src="https://www.computerhope.com/jargon/m/example.mp3" />
-          </audio> -->
+          <h1>{{ nama }}</h1>
+          <h1>{{ count }}</h1>
+          <h1>{{ score }} ===</h1>
+          <h1>{{ title }}</h1>
           <iframe :src="nama" frameborder="0"></iframe>
-          <input type="text" v-model="answer" v-if="index >= 1">
+          <div v-for="(message,i) in messages" :key="i">
+            <span>{{message.user}}</span><br>
+            <span>{{message.text}}</span>
+          </div>
+          <input type="text" v-model="answer" v-if="index >= 1"> 
+          <input type="button" value="send" @click="sendMessages">
         </div>
       </div>
     </div>
@@ -34,46 +37,92 @@ export default {
   name: 'PlayRoom',
   data () {
     return {
-      started: false,
       nama: '', // damey song quiz
       count: 3,
       index: 0,
       answer: '',
       score: 0,
-      username: localStorage.username
+      title: ''
     }
   },
   computed: {
+    messages(){
+      return this.$store.state.messages
+    },
     songs () {
       return this.$store.state.songs
+    },
+    users () {
+      return this.$store.state.users
+    },
+    playerOne(){
+      if (this.$store.state.users.length > 0) {
+        return this.$store.state.users[0].name
+      } else {
+        return false
+      }
+    },
+    username(){
+      return localStorage.username
+    },
+    started () {
+      return this.$store.state.started
+    }
+  },
+  sockets: {
+    startTimer () {
+      this.timer()
+      console.log('masiuk start ==============')
+    },
+    winner (payload) {
+      if (payload.name === this.username) {
+        
+      }
     }
   },
   methods: {
-    startGame () {
-      this.started = true
-      this.startTImer()
+    sendMessages(){
+      const newMessage = {
+        text : this.answer,
+        user: localStorage.username,
+        title: this.title
+      }
+      this.$socket.emit('newMessage', newMessage)
     },
-    startTImer () {
+    startGame () {
+      this.$socket.emit('startGame')
+      // this.started = true
+      // this.startTImer()
+      // this.$store.dispatch('fetchSongData')
+    },
+    timer () {
       setTimeout(() => {
         if (this.count === 0) {
           if (this.index === 10) {
             console.log('sudah')
+            this.$socket.emit('score')
             this.answer = ''
           } else {
-            this.nama = this.songs[this.index]
+            // console.log(this.$store.state.songs[0].title,'<<<<<song in play (title)')
+          
+            this.nama = this.$store.state.songs[this.index].url
+            this.title = this.$store.state.songs[this.index].title
             this.count = 10
             this.index++
+            console.log(this.index, '==========')
             if (this.index >= 1) {
-              if (this.answer === this.songs[this.index - 2]) {
+              console.log(this.index)
+              // if (this.answer === this.songs[this.index - 2]) {
+              if (this.answer.toLowerCase() === this.title.toLowerCase()) { ///undefinde index
                 this.score++
               }
               this.answer = ''
-              this.startTImer()
+              this.timer()
             }
           }
         } else {
           this.count = this.count - 1
-          this.startTImer()
+          this.timer()
         }
       }, 1000
       )

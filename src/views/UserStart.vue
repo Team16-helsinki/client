@@ -25,7 +25,8 @@ export default {
   methods: {
     getUsername () {
       localStorage.setItem('username', this.username)
-      this.$router.push({ name: 'ListRoom' })
+      this.$socket.emit('inputUser', this.username)
+      this.$router.push({ name: 'PLayRoom' })
     }
   }
 }
