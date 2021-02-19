@@ -7,8 +7,8 @@ Vue.use(Vuex)
 const baseUrl = 'http://localhost:3000'
 export default new Vuex.Store({
   state: {
-    message: [],
-    song: [],
+    messages: [],
+    songs: [],
     users: []
   },
   mutations: {
@@ -16,10 +16,10 @@ export default new Vuex.Store({
       state.messages = messages
     },
     addMessage (state, newMessage) {
-      state.message.push(newMessage)
+      state.messages.push(newMessage)
     },
-    setSong (state, song) {
-      state.song = song
+    setSong (state, songs) {
+      state.songs = songs
     },
     setUser (state, users) {
       state.users = users
@@ -44,7 +44,8 @@ export default new Vuex.Store({
         method: 'GET',
         url: `${baseUrl}/api/song`
       })
-        .then(({ data }) => {
+        .then(({data}) => {
+          console.log(data)
           context.commit('setSong', data)
         })
         .catch(error => {

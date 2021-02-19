@@ -11,15 +11,19 @@
       </div>
       <div id="gamePage">
         <div v-if="!started">
-          <button @click="startGame" class="btn btn-bg btn-primary" v-if="username === playerOne">START</button>
-          <p>klik to START</p> <br>
+          <button @click="startGame" class="btn btn-bg btn-primary"  v-if="username === playerOne">START</button>
+          <p>game will start soon</p> <br>
         </div>
         <div v-if="started">
           <h1>{{ nama }}</h1>
           <h1>{{ count }}</h1>
-          
           <iframe :src="nama" frameborder="0"></iframe>
-          <input type="text" v-model="answer" v-if="index >= 1">
+          <div v-for="(message,index) in messages" :key="index">
+            <span>{{message.user}}</span><br>
+            <span>{{message.text}}</span>
+          </div>
+          <input type="text" v-model="answer" v-if="index >= 1"> 
+          <input type="button" value="send" @click="sendMessages">
         </div>
       </div>
     </div>
@@ -36,10 +40,13 @@ export default {
       count: 3,
       index: 0,
       answer: '',
-      score: 0
+      score: 0,
     }
   },
   computed: {
+    messages(){
+      return this.$store.state.messages
+    },
     songs () {
       return this.$store.state.songs
     },
@@ -54,9 +61,17 @@ export default {
     }
   },
   methods: {
+    sendMessages(){
+      const newMessage = {
+        text : this.answer,
+        user: localStorage.username
+      }
+      this.$socket.emit('newMessage', newMessage)
+    },
     startGame () {
       this.started = true
       this.startTImer()
+      this.$store.dispatch('fetchSongData')
     },
     startTImer () {
       setTimeout(() => {
@@ -65,11 +80,12 @@ export default {
             console.log('sudah')
             this.answer = ''
           } else {
-            this.nama = this.songs[this.index]
+            console.log(this.$store.state.songs[0].title,'<<<<<song in play (title)')
+            this.nama = this.$store.state.songs[this.index].url
             this.count = 10
             this.index++
             if (this.index >= 1) {
-              if (this.answer === this.songs[this.index - 2]) {
+              if (this.answer === this.$store.state.songs[this.index - 2].title) { ///undefinde index
                 this.score++
               }
               this.answer = ''
