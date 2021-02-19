@@ -26,9 +26,15 @@
         </div>
       </div>
       <div id="gamePage">
-        <div>
-          <button class="btn btn-bg btn-primary">START</button>
+        <div v-if="!started">
+          <button @click="startGame" class="btn btn-bg btn-primary">START</button>
           <p>klik to START</p> <br>
+        </div>
+        <div v-if="started">
+          <h1>{{ nama }}</h1>
+          <h1>{{ count }}</h1>
+          <input type="text" v-model="answer" v-if="index >= 1">
+          <!-- <iframe src="https://genius.com/songs/4063065/apple_music_player" frameborder="0"></iframe> -->
         </div>
       </div>
     </div>
@@ -37,7 +43,56 @@
 
 <script>
 export default {
-
+  name: 'PlayRoom',
+  data () {
+    return {
+      started: false,
+      namaNama: ['bayu', 'ada', 'fans', 'ngawurr', 'bissmillah', 'kelar', 'woi', 'asdasd', 'qweqwe', 'asdasdas 10'], // damey songs
+      nama: '', // damey song quiz
+      count: 3,
+      index: 0,
+      answer: '',
+      score: 0,
+      collectAnswer: []
+    }
+  },
+  computed: {
+    songs () {
+      return this.$store.state.songs
+    }
+  },
+  methods: {
+    startGame () {
+      this.started = true
+      this.startTImer()
+    },
+    startTImer () {
+      setTimeout(() => {
+        if (this.count === 0) {
+          if (this.index === 10) {
+            console.log('sudah')
+            this.answer = ''
+          } else {
+            this.nama = this.songs[this.index]
+            this.count = 10
+            this.index++
+            console.log(this.index)
+            if (this.index >= 1) {
+              if (this.answer === this.namaNama[this.index - 2]) {
+                this.score++
+              }
+              this.answer = ''
+              this.startTImer()
+            }
+          }
+        } else {
+          this.count = this.count - 1
+          this.startTImer()
+        }
+      }, 1000
+      )
+    }
+  }
 }
 </script>
 
