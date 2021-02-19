@@ -7,27 +7,33 @@
       </div>
       <h4>Halo {{username}}</h4>
     </div>
-    <div id="cardList" class="row">
-      <div class="card">
-        <img class="card-img-top" src="https://images.unsplash.com/photo-1593642634443-44adaa06623a?ixid=MXwxMjA3fDF8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=625&q=80" alt="Card image cap">
-        <div class="card-body">
-          <h5 class="card-title">Room 1</h5>
-          <p class="card-text">Room Name/ genre/ years</p>
-          <div class="button">
-            <a @click="goTo" class="btn btn-primary">JOIN</a>
-          </div>
-        </div>
-      </div>
+    <div v-for="room in roomData.length" :key="room">
+      <Room :roomProp="roomData[room]" :goToProp="goTo()"></Room>
     </div>
   </section>
 </template>
 
 <script>
+import Room from "../components/Room"
 export default {
+  components: {
+    Room
+  },
   name: 'ListRoom',
   data () {
     return {
-      username: ''
+      username: '',
+      roomData: [
+        {
+          name: 'Pop'
+        }, {
+          name: 'Rock'
+        }, {
+          name: 'Classic'
+        }, {
+          name: 'Jazz'
+        }
+      ]
     }
   },
   methods: {
