@@ -5,23 +5,7 @@
         <div class="card">
           <div class="card-body">
             <img src='https://avataaars.io/?avatarStyle=Circle&topType=LongHairBigHair&accessoriesType=Blank&hairColor=SilverGray&facialHairType=BeardLight&facialHairColor=BrownDark&clotheType=Hoodie&clotheColor=Gray01&eyeType=Happy&eyebrowType=Default&mouthType=Default&skinColor=Brown'/>
-            test
-          </div>
-          <div class="card-body">
-            <img src='https://avataaars.io/?avatarStyle=Circle&topType=LongHairBigHair&accessoriesType=Blank&hairColor=SilverGray&facialHairType=BeardLight&facialHairColor=BrownDark&clotheType=Hoodie&clotheColor=Gray01&eyeType=Happy&eyebrowType=Default&mouthType=Default&skinColor=Brown'/>
-            test
-          </div>
-          <div class="card-body">
-            <img src='https://avataaars.io/?avatarStyle=Circle&topType=LongHairBigHair&accessoriesType=Blank&hairColor=SilverGray&facialHairType=BeardLight&facialHairColor=BrownDark&clotheType=Hoodie&clotheColor=Gray01&eyeType=Happy&eyebrowType=Default&mouthType=Default&skinColor=Brown'/>
-            test
-          </div>
-          <div class="card-body">
-            <img src='https://avataaars.io/?avatarStyle=Circle&topType=LongHairBigHair&accessoriesType=Blank&hairColor=SilverGray&facialHairType=BeardLight&facialHairColor=BrownDark&clotheType=Hoodie&clotheColor=Gray01&eyeType=Happy&eyebrowType=Default&mouthType=Default&skinColor=Brown'/>
-            test
-          </div>
-          <div class="card-body">
-            <img src='https://avataaars.io/?avatarStyle=Circle&topType=LongHairBigHair&accessoriesType=Blank&hairColor=SilverGray&facialHairType=BeardLight&facialHairColor=BrownDark&clotheType=Hoodie&clotheColor=Gray01&eyeType=Happy&eyebrowType=Default&mouthType=Default&skinColor=Brown'/>
-            test
+            {{username}}
           </div>
         </div>
       </div>
@@ -31,10 +15,14 @@
           <p>klik to START</p> <br>
         </div>
         <div v-if="started">
-          <h1>{{ nama }}</h1>
-          <h1>{{ count }}</h1>
+          <div id="css">tes</div>
+          <h2>{{ score }}</h2>
+          <h2>{{ count }}</h2>
+          <!-- <audio controls>
+            <source src="https://www.computerhope.com/jargon/m/example.mp3" />
+          </audio> -->
+          <iframe :src="nama" frameborder="0"></iframe>
           <input type="text" v-model="answer" v-if="index >= 1">
-          <!-- <iframe src="https://genius.com/songs/4063065/apple_music_player" frameborder="0"></iframe> -->
         </div>
       </div>
     </div>
@@ -47,13 +35,12 @@ export default {
   data () {
     return {
       started: false,
-      namaNama: ['bayu', 'ada', 'fans', 'ngawurr', 'bissmillah', 'kelar', 'woi', 'asdasd', 'qweqwe', 'asdasdas 10'], // damey songs
       nama: '', // damey song quiz
       count: 3,
       index: 0,
       answer: '',
       score: 0,
-      collectAnswer: []
+      username: localStorage.username
     }
   },
   computed: {
@@ -76,9 +63,8 @@ export default {
             this.nama = this.songs[this.index]
             this.count = 10
             this.index++
-            console.log(this.index)
             if (this.index >= 1) {
-              if (this.answer === this.namaNama[this.index - 2]) {
+              if (this.answer === this.songs[this.index - 2]) {
                 this.score++
               }
               this.answer = ''
@@ -97,6 +83,15 @@ export default {
 </script>
 
 <style scoped>
+#css {
+  border: solid;
+  width: 50px;
+  height: 30px;
+  /* position: absolute; */
+  z-index: 99;
+  background-color: white;
+  color: white;
+}
 section{
   height: 100vh;
   align-items: center;
@@ -144,5 +139,12 @@ div p{
 .card-body img {
   width: 70px;
   margin-bottom: 9.4px;
+}
+iframe{
+  color: aliceblue;
+  height: 50px;
+  width: 300px;
+  margin-top: -110px;
+  margin-left:-180px
 }
 </style>
